@@ -27,11 +27,16 @@ class PharInstaller extends LibraryInstaller implements InstallerInterface
     {
         $this->initializeBinDir();
         parent::installBinaries($package);
+        $packageExtra = $package->getExtra();
 
         $phars = glob($this->getInstallPath($package) . '/*.phar');
         $pathToPhar = realpath(reset($phars));
 
-        $link = $this->binDir . '/' . basename($pathToPhar);
+        if(isset($packageExtra['bin-name'])) {
+            $link = $this->binDir . '/' . $packageExtra['bin-name'];
+        } else {
+            $link = $this->binDir . '/' . basename($pathToPhar);
+        }
         $relativeBin = $this->filesystem->findShortestPath($link, $pathToPhar);
 
 
