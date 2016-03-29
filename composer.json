@@ -1,6 +1,6 @@
 {
     "name": "hco/phar-installer-plugin",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "type": "composer-plugin",
     "license": "MIT",
     "autoload": {
@@ -10,7 +10,7 @@
         "class": "hco\\ComposerPharInstaller\\PharInstallerPlugin"
     },
     "require": {
-        "composer-plugin-api": "1.0.0"
+        "composer-plugin-api": "^1.0"
     },
     "require-dev": {
         "composer/composer": "1.0.*@dev"
