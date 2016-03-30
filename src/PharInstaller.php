@@ -10,6 +10,7 @@ use Composer\Installer\LibraryInstaller;
 use Composer\IO\IOInterface;
 use Composer\Package\PackageInterface;
 use Composer\Util\Filesystem;
+use Composer\Repository\InstalledRepositoryInterface;
 
 class PharInstaller extends LibraryInstaller implements InstallerInterface
 {
@@ -23,19 +24,21 @@ class PharInstaller extends LibraryInstaller implements InstallerInterface
         );
     }
 
-    protected function installBinaries(PackageInterface $package)
+    public function install(InstalledRepositoryInterface $repo, PackageInterface $package)
     {
-        $this->initializeBinDir();
-        parent::installBinaries($package);
+        parent::install($repo, $package);
+        $binDir = rtrim($this->composer->getConfig()->get('bin-dir'), '/');
+        $this->filesystem->ensureDirectoryExists($binDir);
+
         $packageExtra = $package->getExtra();
 
         $phars = glob($this->getInstallPath($package) . '/*.phar');
         $pathToPhar = realpath(reset($phars));
 
         if(isset($packageExtra['bin-name'])) {
-            $link = $this->binDir . '/' . $packageExtra['bin-name'];
+            $link = $binDir . '/' . $packageExtra['bin-name'];
         } else {
-            $link = $this->binDir . '/' . basename($pathToPhar);
+            $link = $binDir . '/' . basename($pathToPhar);
         }
         $relativeBin = $this->filesystem->findShortestPath($link, $pathToPhar);
 
