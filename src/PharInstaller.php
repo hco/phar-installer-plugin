@@ -42,6 +42,9 @@ class PharInstaller extends LibraryInstaller implements InstallerInterface
         }
         $relativeBin = $this->filesystem->findShortestPath($link, $pathToPhar);
 
+        if (file_exists($link)) {
+            unlink($link);
+        }
 
         if (false === symlink($relativeBin, $link)) {
             throw new \ErrorException();
